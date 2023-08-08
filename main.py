@@ -1,15 +1,14 @@
 import sys
 
 
-clients = 'pablo,ricardo,'
+clients = ['pablo' ,'ricardo']
 
 
 def create_client(client_name):
-    global clients
 
     if client_name not in clients:
-        clients += client_name
-        _add_comma()
+        clients.append(client_name)
+    
     else:
         print(f'Client {client_name} has alredy been registered')
 
@@ -22,29 +21,35 @@ def search_client(client_name):
 
 
 def update_client(client_name):
-    global clients
     
     if client_name in clients:
         print("\t***** New Name *****")
         updated_client_name = _get_client_name()
-        clients = clients.replace(client_name, updated_client_name)
+        try:
+            client_index = clients.index(client_name)
+            clients[client_index] = updated_client_name
+        except ValueError:
+            _show_not_found_client_message()
 
     else:
         _show_not_found_client_message(client_name)
 
 
 def delete_client(client_name):
-    global clients
 
     if client_name in clients:
-        clients = clients.replace(client_name + ',', '')
+        try:
+            clients.remove(client_name)
+        except ValueError:
+            _show_not_found_client_message(client_name)
 
     else:
         _show_not_found_client_message(client_name)
 
 
 def list_clients():
-    print(clients)
+    for index, client in enumerate(clients):
+        print(f"{index}- {client}")
 
 
 def _add_comma():
@@ -77,6 +82,7 @@ def print_welcome():
     print('[S]earch client')
     print('[U]pdate client')
     print('[D]elete client')
+    print('[V]iew clients')
 
 
 if __name__ == '__main__':
@@ -96,6 +102,9 @@ if __name__ == '__main__':
     elif command == 'U':
         older_name = _get_client_name()
         update_client(older_name)
+    elif command == 'V':
+        print('\t*** Clients ***')
+        list_clients()
     else:
         print('Invalid command')
 
