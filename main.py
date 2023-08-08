@@ -10,6 +10,13 @@ def create_client(client_name):
         print(f'Client {client_name} has alredy been registered')
 
 
+def search_client(client_name):
+    if client_name in clients:
+        print(f'Client {client_name} is in the list')
+    else:
+        _show_not_found_client_message(client_name)
+
+
 def update_client(client_name):
     global clients
     
@@ -55,6 +62,7 @@ def print_welcome():
     print('*' * 50)
     print('What would you like to do today?')
     print('[C]reate client')
+    print('[S]earch client')
     print('[U]pdate client')
     print('[D]elete client')
 
@@ -67,6 +75,9 @@ if __name__ == '__main__':
     if command == 'C':
         client_name = _get_client_name()
         create_client(client_name)
+    elif command == 'S':
+        client_name = _get_client_name()
+        search_client(client_name)
     elif command == 'D':
         client_name = _get_client_name()
         delete_client(client_name)
