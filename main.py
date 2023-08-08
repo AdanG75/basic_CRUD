@@ -19,7 +19,17 @@ def update_client(client_name):
         clients = clients.replace(client_name, updated_client_name)
 
     else:
-        print(f"Client {client_name} is not in the list")
+        _show_not_found_client_message(client_name)
+
+
+def delete_client(client_name):
+    global clients
+
+    if client_name in clients:
+        clients = clients.replace(client_name + ',', '')
+
+    else:
+        _show_not_found_client_message(client_name)
 
 
 def list_clients():
@@ -34,6 +44,10 @@ def _add_comma():
 
 def _get_client_name():
     return input("Give me your name, please:\n-> ")
+
+
+def _show_not_found_client_message(client_name):
+    print(f"Client {client_name} is not in the list")
 
 
 def print_welcome():
@@ -54,7 +68,8 @@ if __name__ == '__main__':
         client_name = _get_client_name()
         create_client(client_name)
     elif command == 'D':
-        pass
+        client_name = _get_client_name()
+        delete_client(client_name)
     elif command == 'U':
         older_name = _get_client_name()
         update_client(older_name)
