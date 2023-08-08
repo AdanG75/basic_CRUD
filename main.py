@@ -1,4 +1,8 @@
+import sys
+
+
 clients = 'pablo,ricardo,'
+
 
 def create_client(client_name):
     global clients
@@ -50,7 +54,15 @@ def _add_comma():
 
 
 def _get_client_name():
-    return input("Give me your name, please:\n-> ")
+    client_name = None
+
+    while not client_name:
+        client_name = input("Give me your name, please:\n-> ")
+    
+        if client_name == 'exit':
+            sys.exit()
+
+    return client_name 
 
 
 def _show_not_found_client_message(client_name):
