@@ -1,50 +1,68 @@
 import sys
 
 
-clients = ['pablo' ,'ricardo']
+clients = [
+    {
+        'name': 'Pablo',
+        'company': 'Google',
+        'email': 'pablo@google.com',
+        'position': 'Software Engineer'
+    } ,
+    {
+        'name': 'Ricardo',
+        'company': 'Facebook',
+        'email': 'ricardo@facebook.com',
+        'position': 'Data Engineer'
+    }
+]
 
 
-def create_client(client_name):
+def create_client(client):
+    for current_client in clients:
+        if current_client['email'] == client['email']:
+            client_email = client['email']
+            print(f'Email {client_email} has alredy been registered')
+            return
 
-    if client_name not in clients:
-        clients.append(client_name)
+    clients.append(client)
     
-    else:
-        print(f'Client {client_name} has alredy been registered')
+
+def search_client(key: str, value):
+    for client in clients:
+        if client[key] == value:
+            print(f'Client\'s {key}: {value} is in the list')
+            return
+        
+    _show_not_found_client_message(key, value)
 
 
-def search_client(client_name):
-    if client_name in clients:
-        print(f'Client {client_name} is in the list')
-    else:
-        _show_not_found_client_message(client_name)
+def search_client_by_name(name: str):
+    search_client('name', name)
 
 
-def update_client(client_name):
+def search_client_by_email(email: str):
+    search_client('email', email)
+
+
+def update_client(client_email: str):
+    for index, client in enumerate(clients):
+        if client['email'] == client_email:
+            print("\t***** New Name *****")
+            updated_client = _get_client_data()
+            clients[index] = updated_client
+            return
     
-    if client_name in clients:
-        print("\t***** New Name *****")
-        updated_client_name = _get_client_name()
-        try:
-            client_index = clients.index(client_name)
-            clients[client_index] = updated_client_name
-        except ValueError:
-            _show_not_found_client_message()
-
-    else:
-        _show_not_found_client_message(client_name)
+    _show_not_found_client_message('email', client_email)
 
 
-def delete_client(client_name):
+def delete_client(client_email: str):
 
-    if client_name in clients:
-        try:
-            clients.remove(client_name)
-        except ValueError:
-            _show_not_found_client_message(client_name)
+    for index, client in enumerate(clients):
+        if client['email'] == client_email:
+            clients.pop(index)
+            return
 
-    else:
-        _show_not_found_client_message(client_name)
+    _show_not_found_client_message('email', client_email)
 
 
 def list_clients():
@@ -58,20 +76,34 @@ def _add_comma():
     clients += ','
 
 
-def _get_client_name():
-    client_name = None
+def _get_client_data():
+    client_name = _get_data('name')
+    client_email = _get_data('email')
+    client_position = _get_data('position')
+    client_company = _get_data('company')
 
-    while not client_name:
-        client_name = input("Give me your name, please:\n-> ")
+    return {
+        'name': client_name,
+        'company': client_company,
+        'email': client_email,
+        'position': client_position
+    }
+
+
+def _get_data(data_required: str):
+    client_data = None
+
+    while not client_data:
+        client_data = input(f"Give me the {data_required} of client, please:\n-> ")
     
-        if client_name == 'exit':
+        if client_data == 'exit':
             sys.exit()
 
-    return client_name 
+    return client_data 
 
 
-def _show_not_found_client_message(client_name):
-    print(f"Client {client_name} is not in the list")
+def _show_not_found_client_message(client_property, client_data):
+    print(f"Client\'s {client_property}: {client_data} is not in the list")
 
 
 def print_welcome():
@@ -91,17 +123,17 @@ if __name__ == '__main__':
     command =  command.upper()
 
     if command == 'C':
-        client_name = _get_client_name()
-        create_client(client_name)
+        client = _get_client_data()
+        create_client(client)
     elif command == 'S':
-        client_name = _get_client_name()
-        search_client(client_name)
+        client_name = _get_data('name')
+        search_client_by_name(client_name)
     elif command == 'D':
-        client_name = _get_client_name()
-        delete_client(client_name)
+        client_email = _get_data('email')
+        delete_client(client_email)
     elif command == 'U':
-        older_name = _get_client_name()
-        update_client(older_name)
+        client_email = _get_data('email')
+        update_client(client_email)
     elif command == 'V':
         print('\t*** Clients ***')
         list_clients()
