@@ -1,0 +1,5 @@
+La programación Orientada a Objetos se sustenta de cuatro pilares fudamentales:
+    - Encapsulation (Encapsulamiento)
+    - Abstaction (Abstracción)
+    - Inheritance (Herencia)
+    - Polyphormism (Polimorfísmo)
