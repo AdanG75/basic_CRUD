@@ -69,17 +69,69 @@ def list(ctx):
 
 
 @clients.command()
+@click.option(
+    '-u', 
+    '--uid', 
+    type=str, 
+    prompt=True, 
+    help='The client ID'
+    )
+@click.option(
+    '-n', 
+    '--name', 
+    type=str, 
+    prompt=True, 
+    help='The client name'
+    )
+@click.option(
+    '-c', 
+    '--company', 
+    type=str, 
+    prompt=True, 
+    help='The client company'
+    )
+@click.option(
+    '-e', 
+    '--email', 
+    type=str, 
+    prompt=True, 
+    help='The client email'
+    )
+@click.option(
+    '-p', 
+    '--position', 
+    type=str, 
+    prompt=True, 
+    help='The client position'
+    )
 @click.pass_context
-def update(ctx, client_uid):
+def update(ctx, uid, name, company, email, position):
     """Updates a client"""
-    pass
+    client_service = ClientService(ctx.obj['clients_table'])
+    client_service.update_client(
+        ClientModel(
+            name=name,
+            company=company,
+            email=email,
+            position=position,
+            uid=uid 
+        ))
 
 
 @clients.command()
+@click.option(
+    '-u', 
+    '--uid', 
+    type=str, 
+    prompt=True, 
+    help='The client ID'
+    )
 @click.pass_context
-def delete(ctx, client_uid):
+def delete(ctx, uid):
     """Deleles a client"""
-    pass
+    client_service = ClientService(ctx.obj['clients_table'])
+    client_service.delete_client(uid=uid)
+
 
 
 all = clients
