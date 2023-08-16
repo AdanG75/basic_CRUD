@@ -1,6 +1,6 @@
 import click
 import csv
-from typing import List
+from typing import List, Optional
 
 from clients.models import Client
 
@@ -15,13 +15,23 @@ class ClientService:
             writer = csv.DictWriter(f, fieldnames=Client.schema())
             writer.writerow(client.to_dict())
 
+    def get_client(self, uid: str) -> Optional[Client]:
+        client_list = self.list_clients()
+
+        for client in client_list:
+            if client['uid'] == uid:
+                return Client(**client)
+
+        return None
+
+    
     def list_clients(self) -> List[dict]:
         with open(self.table_name, mode='r') as f:
             reader = csv.DictReader(f, fieldnames=Client.schema())
 
             return list(reader)
 
-    def update_client(self, updated_cient: Client):
+    def update_client(self, updated_cient: Client) -> bool:
         was_client_found = False
         client_list = self.list_clients()
 
@@ -35,8 +45,7 @@ class ClientService:
         if was_client_found:
             self._save_to_disk(client_list)
 
-        else:
-            click.echo("Client not found")
+        return was_client_found
 
     def delete_client(self, uid: str):
         was_client_found = False
@@ -51,9 +60,8 @@ class ClientService:
 
         if was_client_found:
             self._save_to_disk(client_list)
-
-        else:
-            click.echo("Client not found")
+        
+        return was_client_found
 
     def _save_to_disk(self, client_list: List[Client]):
         with open(self.table_name, mode="w") as f:
